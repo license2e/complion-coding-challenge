@@ -1,0 +1,9 @@
+---
+- name: install nodejs package
+  apt: name={{ item }} state=present
+  with_items:
+    - nodejs
+    - npm
+  tags:
+    - nodejs
+    - apt

@@ -1,0 +1,27 @@
+html, body {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.document_list .document {
+  margin: 10px 0;
+  padding: 25px;
+  border-bottom: 1px solid #ddd;
+}
+
+.document_type {
+  color: #777;
+}
+
+.document_type .document_type_name {
+  font-weight: normal;
+  color: #333;
+}
+
+.properties .property {
+  display: inline-block;
+}

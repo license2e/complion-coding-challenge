@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Complion DMS</title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <script id="document-tpl" type="text/x-handlebars-template">
+      <div class="document">
+        <h4 class="document_type pull-right">Document Type: <span class="document_type_name">{{document_type.document_name}}</span></h4>
+        <h3>{{file_name}}</h3>
+        <h5>{{file_dir}}</h5>
+        <div class="properties pull-right">
+        {{#each metadata_properties}}
+          <div class="property">
+            <strong class="property_name">{{property_name}}:&nbsp;</strong><span class="metadata_property_value">{{metadata_property_value}}</span>
+          </div>
+        {{/each}}
+        </div>
+      </div>
+    </script>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Complion DMS</a>
+        </div>
+      </div>
+    </nav>
+    <div class="jumbotron">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+            <form id="search_form" class="form-inline">
+              <div class="form-group">
+                <label for="document_types">Document Type:</label>
+                <select name="document_types" id="document_types" class="form-control" multiple="multiple" style="width:270px;"></select>
+              </div>
+              <div class="form-group">
+                <label for="irb_number">IRB Number:</label>
+                <input type="text" id="irb_number" name="irb_number" placeholder="IRB Number" class="form-control" />
+              </div>
+              <button type="submit" class="btn btn-success">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div id="view" class="col-md-10 col-md-offset-1">
+          <em>Please wait, loading all the documents...</em>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.0/handlebars.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

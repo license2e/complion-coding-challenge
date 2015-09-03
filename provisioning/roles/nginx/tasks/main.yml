@@ -1,0 +1,55 @@
+---
+- name: install nginx repo signing key
+  apt_key: url=http://nginx.org/keys/nginx_signing.key state=present
+  tags:
+    - nginx
+    - apt
+
+- name: install nginx
+  apt: name=nginx state=present
+  tags:
+    - nginx
+
+- name: nginx doc root parent dir
+  file: name=/var/www owner=www-data group=www-data state=directory
+  tags:
+    - nginx
+
+- name: nginx app root parent dir
+  file: name=/vagrant/build owner=www-data group=www-data state=directory
+  tags:
+    - nginx
+
+# needed for the default nginx config
+- name: create nginx default /index.html
+  copy: src=var/www/index.html dest=/var/www/index.html owner=www-data group=www-data
+  tags:
+    - nginx
+
+- name: create nginx.conf
+  template:
+    src=etc/nginx/nginx.conf.j2
+    dest=/etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+  tags:
+    - nginx
+
+- name: delete nginx default.conf
+  file: path=/etc/nginx/conf.d/default.conf state=absent
+  notify:
+    - restart nginx
+  tags:
+    - nginx
+
+- name: delete nginx example_ssl.conf
+  file: path=/etc/nginx/conf.d/example_ssl.conf state=absent
+  notify:
+    - restart nginx
+  tags:
+    - nginx
+
+- name: start nginx service
+  service: name=nginx state=started enabled=true
+  tags:
+    - nginx

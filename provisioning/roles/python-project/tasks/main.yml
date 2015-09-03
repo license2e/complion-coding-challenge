@@ -1,0 +1,60 @@
+---
+
+- name: create .bash_profile
+  copy: src=home/vagrant/.bash_profile dest=/home/vagrant/.bash_profile owner=vagrant group=vagrant
+
+- name: install python libraries using pip
+  pip: name={{ item }}
+  with_items:
+    - virtualenv
+    - virtualenvwrapper
+    - psycopg2
+
+- name: create virtualenvs directory
+  file:
+    state=directory
+    path=/home/vagrant/.virtualenvs
+    owner=vagrant
+    group=vagrant
+
+- name: install requirements
+  pip:
+    requirements=/vagrant/{{ project_name }}/requirements/dev.txt
+    virtualenv=/home/vagrant/.virtualenvs/{{ project_name }}
+  sudo: yes
+  sudo_user: vagrant
+
+- name: configure virtualenvwrapper
+  lineinfile: dest=/home/vagrant/.bashrc regexp='{{ item.regexp }}' line='{{ item.line }}'
+  with_items:
+    - regexp: '^export VIRTUALENVWRAPPER_PYTHON='
+      line: 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python{{ python_version }}'
+    - regexp: '^export WORKON_HOME='
+      line: 'export WORKON_HOME=$HOME/.virtualenvs'
+    - regexp: '^export PROJECT_HOME'
+      line: 'export PROJECT_HOME=/vagrant'
+    - regexp: '^source /usr/local/bin/virtualenvwrapper'
+      line: 'source /usr/local/bin/virtualenvwrapper.sh'
+
+- name: turn on project virtualenv on login
+  lineinfile: dest=/home/vagrant/.bash_profile regexp='^{{ item }}' line='{{ item }}'
+  with_items:
+    - 'workon {{ project_name }}'
+    - 'cd /vagrant'
+
+- name: set up virtualenv environment variables
+  template: >
+    src=virtualenv/bin/{{ item }}.j2
+    dest=/home/vagrant/.virtualenvs/{{ project_name }}/bin/{{ item }}
+    owner=vagrant
+    mode=0755
+  with_items:
+    - postactivate
+    - postdeactivate
+
+- name: install nginx config to proxy to django
+  template: src={{item}}.j2 dest=/{{item}} owner=root group=root mode=0644
+  with_items:
+    - 'etc/nginx/conf.d/{{ project_name }}.conf'
+  notify:
+    - restart nginx

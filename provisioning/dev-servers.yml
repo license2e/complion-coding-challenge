@@ -1,0 +1,7 @@
+---
+- hosts: all
+  roles:
+    - general
+    - postgres
+    - python-project
+    - nodejs
